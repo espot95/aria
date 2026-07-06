@@ -1,70 +1,101 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import IntestazionePagina from "../components/IntestazionePagina.astro";
-import { prenotazione, whatsappLink, contatti, consulti } from "../data/site.js";
+import { prenotazione, whatsappLink, contatti, consulti, tariffe } from "../data/site.js";
 
-const usaCalendly = Boolean(prenotazione.calendlyUrl);
 const metodiPagamento = ["PayPal", "Carta", "Apple Pay", "Google Pay", "Satispay", "Bonifico"];
 ---
 
 <Layout
   titolo="Prenota il tuo consulto"
-  descrizione="Prenota online il tuo consulto ARIA: scegli il servizio, il giorno e l'orario che preferisci direttamente dal calendario."
+  descrizione="Prenota il tuo consulto ARIA compilando il modulo: scegli il tipo di consulto, il giorno e la fascia oraria che preferisci."
 >
   <IntestazionePagina
     occhiello="Prenota"
     titolo="Prenota il tuo consulto"
-    sottotitolo="Scegli data e orario dal calendario qui sotto. Riceverai una conferma con tutti i dettagli."
+    sottotitolo="Compila il modulo con le tue preferenze: ti ricontatto io per confermare giorno e orario. È semplice e senza impegno."
   />
 
   <section class="sezione">
     <div class="contenitore prenota">
-      <div class="prenota__calendario rivela">
-        {usaCalendly ? (
-          <>
-            <div
-              class="calendly-inline-widget"
-              data-url={prenotazione.calendlyUrl}
-              style="min-width:320px;height:720px;"
-            ></div>
-            <script is:inline async src="https://assets.calendly.com/assets/external/widget.js"></script>
-          </>
-        ) : (
-          <>
-            <div id="cal-inline" class="cal-inline"></div>
-            <script is:inline define:vars={{ calLink: prenotazione.calcomLink }}>
-              (function (C, A, L) {
-                let p = function (a, ar) { a.q.push(ar); };
-                let d = C.document;
-                C.Cal = C.Cal || function () {
-                  let cal = C.Cal; let ar = arguments;
-                  if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; }
-                  if (ar[0] === L) {
-                    const api = function () { p(api, arguments); };
-                    const namespace = ar[1]; api.q = api.q || [];
-                    if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); }
-                    else p(cal, ar);
-                    return;
-                  }
-                  p(cal, ar);
-                };
-              })(window, "https://app.cal.com/embed/embed.js", "init");
-              Cal("init", { origin: "https://cal.com" });
-              Cal("inline", {
-                elementOrSelector: "#cal-inline",
-                calLink: calLink,
-                layout: "month_view",
-                config: { theme: "light" },
-              });
-            </script>
-            <noscript>
-              <p class="prenota__noscript">
-                Per prenotare online attiva JavaScript, oppure scrivimi su
-                <a href={whatsappLink} target="_blank" rel="noopener">WhatsApp</a>.
-              </p>
-            </noscript>
-          </>
-        )}
+      <div class="prenota__modulo rivela">
+        <form id="modulo-prenotazione" novalidate>
+          <div class="campi">
+            <div class="campo">
+              <label for="nome">Nome e cognome *</label>
+              <input type="text" id="nome" name="nome" required autocomplete="name" />
+            </div>
+
+            <div class="campo campo--meta">
+              <div class="campo">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required autocomplete="email" />
+              </div>
+              <div class="campo">
+                <label for="telefono">Telefono / WhatsApp</label>
+                <input type="tel" id="telefono" name="telefono" autocomplete="tel" />
+              </div>
+            </div>
+
+            <div class="campo campo--meta">
+              <div class="campo">
+                <label for="tipo">Tipo di consulto *</label>
+                <select id="tipo" name="tipo_consulto" required>
+                  <option value="" disabled selected>Scegli…</option>
+                  {consulti.map((c) => <option value={c.nome}>{c.nome}</option>)}
+                  <option value="Non so, aiutami a scegliere">Non so, aiutami a scegliere</option>
+                </select>
+              </div>
+              <div class="campo">
+                <label for="durata">Durata</label>
+                <select id="durata" name="durata">
+                  <option value="" disabled selected>Scegli…</option>
+                  {tariffe.map((t) => <option value={t.servizio}>{t.servizio} — {t.prezzo}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div class="campo campo--meta">
+              <div class="campo">
+                <label for="giorno">Giorno preferito</label>
+                <input type="date" id="giorno" name="giorno_preferito" />
+              </div>
+              <div class="campo">
+                <label for="fascia">Fascia oraria preferita</label>
+                <select id="fascia" name="fascia_oraria">
+                  <option value="" disabled selected>Scegli…</option>
+                  <option value="Mattina (9–13)">Mattina (9–13)</option>
+                  <option value="Pomeriggio (13–18)">Pomeriggio (13–18)</option>
+                  <option value="Sera (18–22)">Sera (18–22)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="campo">
+              <label for="messaggio">Un messaggio per Aria (facoltativo)</label>
+              <textarea id="messaggio" name="messaggio" rows="4" placeholder="Se vuoi, raccontami brevemente cosa ti porta qui…"></textarea>
+            </div>
+
+            <label class="consenso">
+              <input type="checkbox" id="privacy" name="consenso_privacy" required />
+              <span>
+                Ho letto e accetto il trattamento dei miei dati per essere ricontattata
+                riguardo alla prenotazione. *
+              </span>
+            </label>
+
+            <!-- Anti-spam (non visibile) -->
+            <input type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true" />
+          </div>
+
+          <button type="submit" class="btn modulo__invia">Invia richiesta di prenotazione</button>
+
+          <p class="modulo__esito" id="modulo-esito" role="status" aria-live="polite" hidden></p>
+          <p class="modulo__nota">
+            I campi con * sono obbligatori. Non è un pagamento: è una richiesta.
+            Ti ricontatto io per confermare tutti i dettagli.
+          </p>
+        </form>
       </div>
 
       <aside class="prenota__lato">
@@ -77,8 +108,8 @@ const metodiPagamento = ["PayPal", "Carta", "Apple Pay", "Google Pay", "Satispay
         </div>
 
         <div class="carta prenota__box rivela">
-          <h3>Hai bisogno di aiuto?</h3>
-          <p>Se preferisci, puoi prenotare o chiedere informazioni anche direttamente:</p>
+          <h3>Preferisci un contatto diretto?</h3>
+          <p>Puoi prenotare o chiedere informazioni anche subito:</p>
           <a href={whatsappLink} class="btn" target="_blank" rel="noopener" style="width:100%; justify-content:center;">
             Scrivimi su WhatsApp
           </a>
@@ -99,6 +130,85 @@ const metodiPagamento = ["PayPal", "Carta", "Apple Pay", "Google Pay", "Satispay
   </section>
 </Layout>
 
+<script is:inline define:vars={{ chiave: prenotazione.web3formsKey, emailDest: contatti.email }}>
+  const form = document.getElementById("modulo-prenotazione");
+  const esito = document.getElementById("modulo-esito");
+  const bottone = form?.querySelector('button[type="submit"]');
+
+  function mostraEsito(testo, tipo) {
+    if (!esito) return;
+    esito.textContent = testo;
+    esito.hidden = false;
+    esito.className = "modulo__esito modulo__esito--" + tipo;
+  }
+
+  function datiFormattati(fd) {
+    const etichette = {
+      nome: "Nome",
+      email: "Email",
+      telefono: "Telefono/WhatsApp",
+      tipo_consulto: "Tipo di consulto",
+      durata: "Durata",
+      giorno_preferito: "Giorno preferito",
+      fascia_oraria: "Fascia oraria",
+      messaggio: "Messaggio",
+    };
+    return Object.entries(etichette)
+      .map(([k, et]) => `${et}: ${fd.get(k) || "-"}`)
+      .join("\n");
+  }
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const fd = new FormData(form);
+    if (bottone) { bottone.disabled = true; bottone.textContent = "Invio in corso…"; }
+
+    // CASO 1 — Chiave Web3Forms configurata: invio automatico via email
+    if (chiave && chiave.trim() !== "") {
+      try {
+        const payload = Object.fromEntries(fd.entries());
+        payload.access_key = chiave;
+        payload.subject = "Nuova richiesta di prenotazione — ARIA";
+        payload.from_name = "Sito ARIA";
+
+        const risposta = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const dati = await risposta.json();
+
+        if (dati.success) {
+          form.reset();
+          mostraEsito("Grazie! La tua richiesta è stata inviata. Ti ricontatto al più presto. 🌙", "ok");
+        } else {
+          mostraEsito("Qualcosa è andato storto nell'invio. Riprova o scrivimi su WhatsApp.", "errore");
+        }
+      } catch (err) {
+        mostraEsito("Connessione non riuscita. Riprova o scrivimi su WhatsApp.", "errore");
+      } finally {
+        if (bottone) { bottone.disabled = false; bottone.textContent = "Invia richiesta di prenotazione"; }
+      }
+      return;
+    }
+
+    // CASO 2 — Nessuna chiave: apre l'email precompilata (funziona senza configurazione)
+    const corpo = encodeURIComponent(
+      "Ciao Aria, vorrei prenotare un consulto.\n\n" + datiFormattati(fd)
+    );
+    const oggetto = encodeURIComponent("Richiesta di prenotazione — ARIA");
+    window.location.href = `mailto:${emailDest}?subject=${oggetto}&body=${corpo}`;
+    mostraEsito("Si aprirà la tua app email con la richiesta già pronta: premi Invia per completare.", "ok");
+    if (bottone) { bottone.disabled = false; bottone.textContent = "Invia richiesta di prenotazione"; }
+  });
+</script>
+
 <style>
   .prenota {
     display: grid;
@@ -108,22 +218,97 @@ const metodiPagamento = ["PayPal", "Carta", "Apple Pay", "Google Pay", "Satispay
   @media (min-width: 940px) {
     .prenota { grid-template-columns: 1fr 340px; gap: 2.5rem; }
   }
-  .prenota__calendario {
+
+  .prenota__modulo {
     background: #fff;
     border: 1px solid var(--bordo);
     border-radius: var(--raggio-lg);
-    padding: 0.75rem;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
     box-shadow: var(--ombra-carta);
-    min-height: 640px;
   }
-  .cal-inline {
+  .campi { display: grid; gap: 1.4rem; }
+  .campo { display: flex; flex-direction: column; gap: 0.45rem; }
+  .campo--meta {
+    display: grid;
+    gap: 1.4rem;
+  }
+  @media (min-width: 560px) {
+    .campo--meta { grid-template-columns: 1fr 1fr; }
+  }
+  .campo label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--blu-notte);
+  }
+  .campo input,
+  .campo select,
+  .campo textarea {
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--testo);
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--bordo);
+    border-radius: 10px;
+    background: var(--bianco);
+    transition: border-color var(--transizione), box-shadow var(--transizione);
     width: 100%;
-    height: 700px;
-    overflow: auto;
   }
-  .prenota__noscript { padding: 2rem; text-align: center; }
-  .prenota__noscript a { color: var(--oro); font-weight: 600; }
+  .campo textarea { resize: vertical; }
+  .campo input:focus,
+  .campo select:focus,
+  .campo textarea:focus {
+    outline: none;
+    border-color: var(--oro);
+    box-shadow: 0 0 0 3px rgba(199, 161, 74, 0.15);
+  }
 
+  .consenso {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    font-size: 0.9rem;
+    color: var(--testo-soft);
+    cursor: pointer;
+  }
+  .consenso input {
+    margin-top: 0.2rem;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--oro);
+    flex: 0 0 auto;
+  }
+
+  .modulo__invia {
+    margin-top: 1.8rem;
+    width: 100%;
+    justify-content: center;
+  }
+  .modulo__invia:disabled { opacity: 0.7; cursor: default; transform: none; }
+
+  .modulo__esito {
+    margin: 1.2rem 0 0;
+    padding: 0.9rem 1.1rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .modulo__esito--ok {
+    background: rgba(199, 161, 74, 0.12);
+    border: 1px solid var(--bordo-oro);
+    color: var(--blu-notte);
+  }
+  .modulo__esito--errore {
+    background: #fdeceb;
+    border: 1px solid #f3c2bd;
+    color: #a3352b;
+  }
+  .modulo__nota {
+    margin: 1rem 0 0;
+    font-size: 0.82rem;
+    color: var(--testo-soft);
+  }
+
+  /* Colonna laterale */
   .prenota__lato { display: grid; gap: 1.5rem; }
   .prenota__box h3 { font-size: 1.25rem; margin-bottom: 1rem; }
   .prenota__servizi {

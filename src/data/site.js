@@ -12,9 +12,9 @@ export const brand = {
 // --- Contatti (SOSTITUISCI con i tuoi recapiti reali) ---
 export const contatti = {
   // Numero WhatsApp in formato internazionale senza + e senza spazi
-  whatsappNumero: "393000000000",
+  whatsappNumero: "393515844922",
   whatsappTesto: "Ciao Aria, vorrei prenotare un consulto.",
-  email: "info@aria-consulti.it",
+  email: "info.ariaconsulti@gmail.com",
   instagram: "https://instagram.com/",
   tiktok: "https://tiktok.com/",
   facebook: "https://facebook.com/",
@@ -29,9 +29,18 @@ export const whatsappLink = `https://wa.me/${contatti.whatsappNumero}?text=${enc
 // Incolla qui il link del TUO calendario Cal.com o Calendly.
 // Es. Cal.com: "aria/consulto"  |  Es. Calendly: "https://calendly.com/tuonome"
 export const prenotazione = {
-  // Metti il tuo "username/evento" di Cal.com (consigliato, gratuito)
-  calcomLink: "aria/consulto",
-  // In alternativa un URL Calendly completo (lascia vuoto se usi Cal.com)
+  // --- MODULO DI PRENOTAZIONE VIA EMAIL ---
+  // Web3Forms (gratuito) recapita le richieste del modulo alla tua email.
+  // Ottieni la chiave in 1 minuto su https://web3forms.com (inserisci la tua email,
+  // ricevi l'"Access Key" e incollala qui sotto). Le richieste arriveranno a
+  // quell'indirizzo. Vedi COME-USARE.md.
+  web3formsKey: "ecbbf356-bc55-474f-8b9f-7e2cfcff3755",
+  // Se la chiave sopra è vuota, il modulo funziona comunque aprendo l'email
+  // precompilata verso l'indirizzo in "contatti.email".
+
+  // --- Calendario (opzionale, per il futuro) ---
+  // Se un giorno vorrai il calendario invece del modulo, incolla qui il link Cal.com.
+  calcomLink: "",
   calendlyUrl: "",
 };
 

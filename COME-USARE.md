@@ -36,22 +36,34 @@ Qui trovi e puoi modificare:
 
 ---
 
-## 📅 Attivare le prenotazioni (calendario gratuito)
+## 📩 Le prenotazioni (modulo che arriva via email)
 
-Il sito usa **Cal.com** (gratuito) per le prenotazioni online.
+La pagina **Prenota** ha un modulo: il visitatore compila nome, contatto, tipo di
+consulto, giorno e fascia oraria preferiti, e tu ricevi tutto **via email**.
 
-1. Crea un account gratuito su **https://cal.com**
-2. Crea un tipo di evento (es. "Consulto 30 minuti")
-3. Copia il tuo link, es. `nometuo/consulto`
-4. Aprilo in `src/data/site.js` e incollalo qui:
+### Funziona già così com'è
+Se non configuri nulla, al clic su "Invia" si apre l'app email del visitatore con
+la richiesta **già precompilata** verso il tuo indirizzo (quello in `contatti.email`).
+
+### Consigliato: invio automatico via Web3Forms (gratuito, 1 minuto)
+Così le richieste ti arrivano da sole, senza dipendere dall'app email di chi scrive:
+
+1. Vai su **https://web3forms.com**
+2. Inserisci la tua email → ricevi via email una **"Access Key"**
+3. Incolla la chiave in `src/data/site.js`:
    ```js
    export const prenotazione = {
-     calcomLink: "nometuo/consulto",   // <-- il tuo link Cal.com
-     calendlyUrl: "",
+     web3formsKey: "LA-TUA-ACCESS-KEY",   // <-- incolla qui
+     // ...
    };
    ```
+4. Salva. D'ora in poi ogni richiesta dal modulo arriva automaticamente alla tua email.
 
-**Preferisci Calendly?** Lascia vuoto `calcomLink` e metti l'URL completo in `calendlyUrl`.
+> Le email di prenotazione arrivano all'indirizzo con cui ti sei registrata su Web3Forms.
+
+### (Facoltativo, futuro) Passare al calendario
+Se un giorno preferirai un calendario con scelta di data/ora, si può aggiungere Cal.com:
+i campi `calcomLink` / `calendlyUrl` in `site.js` sono già pronti per quando vorrai.
 
 ---
 
