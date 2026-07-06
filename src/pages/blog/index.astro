@@ -1,0 +1,73 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import IntestazionePagina from "../../components/IntestazionePagina.astro";
+import { getCollection } from "astro:content";
+
+const articoli = (await getCollection("blog")).sort(
+  (a, b) => b.data.data.valueOf() - a.data.data.valueOf()
+);
+
+const formattaData = (d) =>
+  d.toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" });
+---
+
+<Layout
+  titolo="Blog"
+  descrizione="Articoli su ascolto, tarocchi, relazioni e crescita personale. Riflessioni e consigli dal mondo di ARIA."
+>
+  <IntestazionePagina
+    occhiello="Blog"
+    titolo="Riflessioni e spunti"
+    sottotitolo="Articoli su ascolto, tarocchi, relazioni e crescita personale. Piccoli spazi di lettura per fermarsi un momento."
+  />
+
+  <section class="sezione">
+    <div class="contenitore">
+      <div class="griglia griglia--3 lista-blog">
+        {articoli.map((a) => (
+          <article class="carta articolo rivela">
+            <div class="articolo__meta">
+              <span class="articolo__categoria">{a.data.categoria}</span>
+              <time datetime={a.data.data.toISOString()}>{formattaData(a.data.data)}</time>
+            </div>
+            <h3 class="articolo__titolo">
+              <a href={`/blog/${a.slug}/`}>{a.data.titolo}</a>
+            </h3>
+            <p>{a.data.descrizione}</p>
+            <a href={`/blog/${a.slug}/`} class="articolo__leggi">Leggi l'articolo →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .articolo { display: flex; flex-direction: column; }
+  .articolo__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+    font-size: 0.8rem;
+    color: var(--testo-soft);
+  }
+  .articolo__categoria {
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+  .articolo__titolo { font-size: 1.4rem; margin: 0 0 0.7rem; }
+  .articolo__titolo a { transition: color var(--transizione); }
+  .articolo__titolo a:hover { color: var(--oro); }
+  .articolo p { color: var(--testo-soft); flex: 1; }
+  .articolo__leggi {
+    margin-top: 1rem;
+    font-weight: 600;
+    color: var(--blu-notte);
+    transition: color var(--transizione);
+  }
+  .articolo__leggi:hover { color: var(--oro); }
+</style>

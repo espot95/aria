@@ -1,0 +1,35 @@
+---
+const { occhiello, titolo, sottotitolo } = Astro.props;
+---
+
+<section class="intestazione-pagina">
+  <div class="intestazione-pagina__stelle" aria-hidden="true"></div>
+  <div class="contenitore">
+    {occhiello && <span class="occhiello">{occhiello}</span>}
+    <h1>{titolo}</h1>
+    {sottotitolo && <p class="guida misura" style="margin-inline:0;">{sottotitolo}</p>}
+  </div>
+</section>
+
+<style>
+  .intestazione-pagina {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(160deg, #081A33 0%, #0b213f 100%);
+    color: var(--testo-chiaro);
+    padding-block: clamp(3.5rem, 8vw, 6rem);
+  }
+  .intestazione-pagina__stelle {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 15% 40%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 80% 30%, rgba(220,191,116,0.7), transparent),
+      radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.4), transparent);
+    opacity: 0.7;
+  }
+  .intestazione-pagina .contenitore { position: relative; }
+  .intestazione-pagina .occhiello { color: var(--oro-chiaro); }
+  .intestazione-pagina h1 { color: var(--bianco); margin-bottom: 0.4rem; }
+  .intestazione-pagina .guida { color: var(--testo-chiaro-soft); max-width: 60ch; }
+</style>

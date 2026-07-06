@@ -1,0 +1,165 @@
+---
+import Layout from "../layouts/Layout.astro";
+import IntestazionePagina from "../components/IntestazionePagina.astro";
+import { video, whatsappLink } from "../data/site.js";
+---
+
+<Layout
+  titolo="Video del Giorno"
+  descrizione="La carta del giorno, il messaggio della settimana e l'energia del momento: i video brevi di Aria per accompagnarti ogni giorno."
+>
+  <IntestazionePagina
+    occhiello="Video del Giorno"
+    titolo="Un piccolo spunto, ogni giorno"
+    sottotitolo="La carta del giorno, il messaggio della settimana e l'energia del momento. Brevi video per fermarti un istante e riflettere."
+  />
+
+  <section class="sezione">
+    <div class="contenitore">
+      <div class="griglia griglia--3">
+        {video.map((v) => (
+          <article class="carta video rivela">
+            <div class="video__player">
+              {v.embed ? (
+                <iframe
+                  src={v.embed}
+                  title={v.titolo}
+                  loading="lazy"
+                  allowfullscreen
+                ></iframe>
+              ) : (
+                <div class="video__segnaposto">
+                  <span class="video__play" aria-hidden="true"></span>
+                  <span class="video__attesa">Video in arrivo</span>
+                </div>
+              )}
+            </div>
+            <span class="video__categoria">{v.categoria}</span>
+            <h3>{v.titolo}</h3>
+            <p>{v.testo}</p>
+            <a href="/prenota/" class="btn btn--fantasma btn--piccolo">Prenota un consulto</a>
+          </article>
+        ))}
+      </div>
+
+      <p class="video-nota testo-centro">
+        Nuovi video ogni giorno sui social. Seguimi per non perderli e ricevi la
+        "Carta della Settimana" iscrivendoti alla newsletter.
+      </p>
+    </div>
+  </section>
+
+  <section class="sezione sezione--alt">
+    <div class="contenitore testo-centro misura">
+      <span class="occhiello">Newsletter</span>
+      <h2>Ricevi la Carta della Settimana</h2>
+      <p class="guida">
+        Iscriviti gratuitamente per ricevere la carta della settimana, offerte esclusive e i
+        nuovi video. Niente spam, solo piccoli spunti di riflessione.
+      </p>
+      <!-- Segnaposto newsletter: collega qui il tuo servizio (Brevo, Mailchimp...) -->
+      <form class="newsletter" onsubmit="return false;">
+        <input type="email" placeholder="La tua email" aria-label="La tua email" required />
+        <button type="submit" class="btn">Iscrivimi</button>
+      </form>
+      <p class="newsletter-nota">
+        (Modulo dimostrativo — da collegare a un servizio email nella fase 2.)
+      </p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .video { display: flex; flex-direction: column; }
+  .video__player {
+    aspect-ratio: 9 / 16;
+    border-radius: var(--raggio);
+    overflow: hidden;
+    margin-bottom: 1.2rem;
+    background: var(--blu-notte);
+  }
+  .video__player iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .video__segnaposto {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background:
+      radial-gradient(ellipse at 50% 120%, rgba(199,161,74,0.25), transparent 60%),
+      linear-gradient(180deg, #0b213f, #081A33);
+  }
+  .video__play {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid var(--bordo-oro);
+    position: relative;
+    background: rgba(199,161,74,0.08);
+  }
+  .video__play::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 54%;
+    transform: translate(-50%, -50%);
+    border-style: solid;
+    border-width: 9px 0 9px 15px;
+    border-color: transparent transparent transparent var(--oro);
+  }
+  .video__attesa {
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--testo-chiaro-soft);
+    opacity: 0.7;
+  }
+  .video__categoria {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+  .video h3 { margin: 0.4rem 0 0.6rem; }
+  .video p { color: var(--testo-soft); flex: 1; }
+  .video .btn { margin-top: 0.5rem; align-self: flex-start; }
+  .btn--piccolo { padding: 0.6rem 1.35rem; font-size: 0.9rem; }
+  .video-nota {
+    margin-top: 3rem;
+    color: var(--testo-soft);
+    max-width: 55ch;
+    margin-inline: auto;
+  }
+
+  .newsletter {
+    display: flex;
+    gap: 0.7rem;
+    max-width: 460px;
+    margin: 2rem auto 0;
+    flex-wrap: wrap;
+  }
+  .newsletter input {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.95rem 1.2rem;
+    border: 1px solid var(--bordo);
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 1rem;
+    background: #fff;
+  }
+  .newsletter input:focus {
+    outline: none;
+    border-color: var(--oro);
+    box-shadow: 0 0 0 3px rgba(199,161,74,0.15);
+  }
+  .newsletter-nota {
+    margin-top: 1rem;
+    font-size: 0.82rem;
+    color: var(--testo-soft);
+    opacity: 0.8;
+  }
+</style>

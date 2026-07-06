@@ -1,0 +1,137 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import { whatsappLink } from "../../data/site.js";
+
+export async function getStaticPaths() {
+  const articoli = await getCollection("blog");
+  return articoli.map((articolo) => ({
+    params: { slug: articolo.slug },
+    props: { articolo },
+  }));
+}
+
+const { articolo } = Astro.props;
+const { Content } = await articolo.render();
+
+const formattaData = (d) =>
+  d.toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" });
+---
+
+<Layout titolo={articolo.data.titolo} descrizione={articolo.data.descrizione}>
+  <article class="articolo-singolo">
+    <header class="articolo-hero">
+      <div class="articolo-hero__stelle" aria-hidden="true"></div>
+      <div class="contenitore articolo-hero__interno">
+        <a href="/blog/" class="articolo-hero__torna">← Tutti gli articoli</a>
+        <span class="articolo-hero__categoria">{articolo.data.categoria}</span>
+        <h1>{articolo.data.titolo}</h1>
+        <p class="articolo-hero__meta">
+          di {articolo.data.autore} ·
+          <time datetime={articolo.data.data.toISOString()}>{formattaData(articolo.data.data)}</time>
+        </p>
+      </div>
+    </header>
+
+    <div class="contenitore">
+      <div class="prosa">
+        <Content />
+      </div>
+
+      <div class="articolo-cta">
+        <h3>Vuoi vivere un momento di ascolto?</h3>
+        <div class="articolo-cta__azioni">
+          <a href="/prenota/" class="btn">Prenota un consulto</a>
+          <a href={whatsappLink} class="btn btn--fantasma" target="_blank" rel="noopener">Scrivimi su WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .articolo-hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(160deg, #081A33 0%, #0b213f 100%);
+    color: var(--testo-chiaro);
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+  .articolo-hero__stelle {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 20% 40%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 75% 25%, rgba(220,191,116,0.7), transparent);
+    opacity: 0.6;
+  }
+  .articolo-hero__interno { position: relative; max-width: 760px; }
+  .articolo-hero__torna {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: var(--testo-chiaro-soft);
+    font-size: 0.9rem;
+    transition: color var(--transizione);
+  }
+  .articolo-hero__torna:hover { color: var(--oro-chiaro); }
+  .articolo-hero__categoria {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--oro);
+    margin-bottom: 0.8rem;
+  }
+  .articolo-hero h1 { color: var(--bianco); }
+  .articolo-hero__meta { color: var(--testo-chiaro-soft); font-size: 0.95rem; margin: 0.5rem 0 0; }
+
+  .prosa {
+    max-width: 720px;
+    margin: clamp(2.5rem, 6vw, 4rem) auto 0;
+    font-size: 1.12rem;
+    line-height: 1.8;
+  }
+  .prosa :global(h2) {
+    margin-top: 2.4rem;
+    font-size: 1.7rem;
+  }
+  .prosa :global(p) { margin-bottom: 1.4rem; color: var(--testo); }
+  .prosa :global(ul) { margin: 0 0 1.4rem; padding-left: 1.3rem; }
+  .prosa :global(li) { margin-bottom: 0.5rem; }
+  .prosa :global(a) {
+    color: var(--blu-notte);
+    font-weight: 600;
+    border-bottom: 1px solid var(--bordo-oro);
+  }
+  .prosa :global(a:hover) { color: var(--oro); }
+  .prosa :global(blockquote) {
+    margin: 2rem 0;
+    padding: 1.2rem 1.8rem;
+    border-left: 3px solid var(--oro);
+    background: var(--grigio-caldo);
+    border-radius: 0 var(--raggio) var(--raggio) 0;
+    font-family: var(--font-titolo);
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--blu-notte);
+  }
+  .prosa :global(blockquote p) { margin: 0; }
+  .prosa :global(em) { color: var(--testo-soft); }
+
+  .articolo-cta {
+    max-width: 720px;
+    margin: 3.5rem auto 0;
+    padding: clamp(2rem, 5vw, 3rem);
+    text-align: center;
+    background: var(--grigio-caldo);
+    border-radius: var(--raggio-lg);
+  }
+  .articolo-cta h3 { margin-bottom: 1.5rem; }
+  .articolo-cta__azioni {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>

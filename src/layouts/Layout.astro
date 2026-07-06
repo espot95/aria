@@ -1,0 +1,93 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+import { brand } from "../data/site.js";
+
+const {
+  titolo,
+  descrizione = "ARIA — uno spazio dedicato all'ascolto, alla riflessione e, per chi lo desidera, all'interpretazione dei Tarocchi. Consulti riservati di ascolto e intuizione.",
+} = Astro.props;
+
+const titoloPagina = titolo
+  ? `${titolo} · ${brand.nome}`
+  : `${brand.nome} — ${brand.sottotitolo}`;
+
+const urlCanonica = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{titoloPagina}</title>
+    <meta name="description" content={descrizione} />
+    <link rel="canonical" href={urlCanonica} />
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={titoloPagina} />
+    <meta property="og:description" content={descrizione} />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:site_name" content={brand.nome} />
+    <meta name="theme-color" content="#081A33" />
+
+    <!-- Tipografia -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a class="salta-al-contenuto" href="#contenuto">Vai al contenuto</a>
+    <Header />
+    <main id="contenuto">
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- Animazione di comparsa alla scroll -->
+    <script>
+      const elementi = document.querySelectorAll(".rivela");
+      if ("IntersectionObserver" in window && elementi.length) {
+        const osservatore = new IntersectionObserver(
+          (voci) => {
+            voci.forEach((voce) => {
+              if (voce.isIntersecting) {
+                voce.target.classList.add("is-visibile");
+                osservatore.unobserve(voce.target);
+              }
+            });
+          },
+          { threshold: 0.12 }
+        );
+        elementi.forEach((el) => osservatore.observe(el));
+      } else {
+        elementi.forEach((el) => el.classList.add("is-visibile"));
+      }
+    </script>
+
+    <style>
+      .salta-al-contenuto {
+        position: absolute;
+        left: -999px;
+        top: 0;
+        background: var(--oro);
+        color: var(--blu-notte);
+        padding: 0.7rem 1.2rem;
+        border-radius: 0 0 10px 0;
+        font-weight: 600;
+        z-index: 200;
+      }
+      .salta-al-contenuto:focus {
+        left: 0;
+      }
+    </style>
+  </body>
+</html>

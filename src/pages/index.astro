@@ -1,0 +1,556 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Icona from "../components/Icona.astro";
+import {
+  brand,
+  consulti,
+  passi,
+  recensioni,
+  faq,
+  whatsappLink,
+  contatti,
+} from "../data/site.js";
+---
+
+<Layout>
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="hero__bagliore" aria-hidden="true"></div>
+    <div class="hero__stelle" aria-hidden="true"></div>
+
+    <div class="contenitore hero__interno">
+      <div class="hero__testo">
+        <span class="occhiello">{brand.sottotitolo}</span>
+        <h1 class="hero__titolo">
+          A volte la risposta più importante<br />
+          è <em>sentirsi ascoltati.</em>
+        </h1>
+        <p class="hero__slogan">"{brand.slogan}"</p>
+        <div class="hero__azioni">
+          <a href="/prenota/" class="btn">Prenota il tuo consulto</a>
+          <a href="#consulti" class="btn btn--fantasma">Scopri i consulti</a>
+        </div>
+      </div>
+
+      <!-- Avatar: sostituisci il segnaposto con la tua foto (vedi COME-USARE.md) -->
+      <div class="hero__avatar">
+        <div class="cornice-avatar">
+          <div class="cornice-avatar__interno" data-avatar>
+            <Icona nome="luna" size={64} />
+            <span class="cornice-avatar__nota">La tua immagine qui</span>
+          </div>
+          <span class="candela candela--1" aria-hidden="true"></span>
+          <span class="candela candela--2" aria-hidden="true"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CHI È ARIA ===================== -->
+  <section id="chi-e-aria" class="sezione">
+    <div class="contenitore chi">
+      <div class="chi__testo rivela">
+        <span class="occhiello">Chi è Aria</span>
+        <h2>Uno spazio di ascolto, prima di tutto.</h2>
+        <p class="guida">
+          ARIA nasce dal desiderio di offrire un momento di dialogo autentico:
+          un tempo sospeso in cui fermarsi, raccontarsi e ritrovare chiarezza.
+        </p>
+        <p>
+          Per chi lo desidera, i Tarocchi diventano uno strumento di riflessione —
+          non una previsione, ma uno specchio simbolico che aiuta a guardare le cose
+          da una nuova prospettiva. Ogni consulto è pensato con discrezione, rispetto
+          e la massima riservatezza.
+        </p>
+        <ul class="valori">
+          <li><strong>Ascolto</strong> — al centro di ogni incontro.</li>
+          <li><strong>Discrezione</strong> — ciò che condividi resta tra noi.</li>
+          <li><strong>Rispetto</strong> — le decisioni restano sempre tue.</li>
+        </ul>
+      </div>
+      <div class="chi__citazione rivela">
+        <blockquote>
+          Non prometto risposte certe.<br />
+          Offro uno spazio in cui le tue domande<br />
+          possono finalmente respirare.
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== I CONSULTI ===================== -->
+  <section id="consulti" class="sezione sezione--alt">
+    <div class="contenitore">
+      <div class="testo-centro misura rivela">
+        <span class="occhiello">I Consulti</span>
+        <h2>Tre modi per prenderti cura di te</h2>
+        <p class="guida">
+          Scegli l'incontro più vicino a ciò che senti in questo momento.
+        </p>
+      </div>
+
+      <div class="griglia griglia--3" style="margin-top: 3.5rem;">
+        {consulti.map((c) => (
+          <article class:list={["carta", "consulto", { "consulto--evidenza": c.inEvidenza }]}>
+            {c.inEvidenza && <span class="consulto__badge">Più scelto</span>}
+            <Icona nome={c.icona} />
+            <h3>{c.nome}</h3>
+            <p>{c.descrizione}</p>
+            <ul class="consulto__punti">
+              {c.punti.map((p) => <li>{p}</li>)}
+            </ul>
+            <a href="/prenota/" class="consulto__link">Prenota →</a>
+          </article>
+        ))}
+      </div>
+
+      <p class="testo-centro" style="margin-top: 2.5rem;">
+        <a href="/offerte/" class="btn btn--fantasma">Vedi tutte le offerte e tariffe</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== COME FUNZIONA ===================== -->
+  <section id="come-funziona" class="sezione">
+    <div class="contenitore">
+      <div class="testo-centro misura rivela">
+        <span class="occhiello">Come funziona</span>
+        <h2>Semplice, in tre passi</h2>
+      </div>
+
+      <div class="griglia griglia--3 passi" style="margin-top: 3.5rem;">
+        {passi.map((p) => (
+          <div class="passo rivela">
+            <span class="passo__numero">{p.numero}</span>
+            <h3>{p.titolo}</h3>
+            <p>{p.testo}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== RECENSIONI ===================== -->
+  <section class="sezione sezione--scura">
+    <div class="contenitore">
+      <div class="testo-centro misura rivela">
+        <span class="occhiello">Recensioni</span>
+        <h2>Le parole di chi ha ascoltato</h2>
+        <p class="guida">Testimonianze autentiche, condivise con il consenso di chi le ha scritte.</p>
+      </div>
+
+      <div class="griglia griglia--3" style="margin-top: 3.5rem;">
+        {recensioni.map((r) => (
+          <figure class="recensione rivela">
+            <div class="recensione__stelle" aria-label="Cinque stelle">★★★★★</div>
+            <blockquote>{r.testo}</blockquote>
+            <figcaption>— {r.autore}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section id="faq" class="sezione sezione--alt">
+    <div class="contenitore faq-blocco">
+      <div class="testo-centro misura rivela">
+        <span class="occhiello">FAQ</span>
+        <h2>Domande frequenti</h2>
+      </div>
+
+      <div class="faq-lista rivela">
+        {faq.map((f) => (
+          <details class="faq-voce">
+            <summary>
+              <span>{f.domanda}</span>
+              <span class="faq-voce__segno" aria-hidden="true"></span>
+            </summary>
+            <div class="faq-voce__risposta"><p>{f.risposta}</p></div>
+          </details>
+        ))}
+      </div>
+
+      <p class="faq-nota testo-centro">
+        ARIA offre un momento di ascolto e riflessione e <strong>non sostituisce</strong> il
+        supporto di professionisti sanitari o psicologici.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== CONTATTI ===================== -->
+  <section id="contatti" class="sezione">
+    <div class="contenitore">
+      <div class="contatti-cta rivela">
+        <span class="occhiello">Contatti</span>
+        <h2>Iniziamo ad ascoltarci</h2>
+        <p class="guida misura">
+          Scrivimi per qualsiasi domanda o prenota direttamente il tuo consulto.
+          Sarà un piacere accoglierti.
+        </p>
+        <div class="hero__azioni" style="justify-content:center;">
+          <a href="/prenota/" class="btn">Prenota un consulto</a>
+          <a href={whatsappLink} class="btn btn--fantasma" target="_blank" rel="noopener">
+            Scrivimi su WhatsApp
+          </a>
+        </div>
+        <p class="contatti-email">
+          oppure <a href={`mailto:${contatti.email}`}>{contatti.email}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ---------------- HERO ---------------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(160deg, #081A33 0%, #0b213f 55%, #0a1c37 100%);
+    color: var(--testo-chiaro);
+    padding-block: clamp(4rem, 10vw, 7.5rem);
+  }
+  .hero__bagliore {
+    position: absolute;
+    left: 50%;
+    bottom: -30%;
+    width: 120%;
+    height: 90%;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse at center, rgba(199, 161, 74, 0.28) 0%, rgba(199, 161, 74, 0.06) 40%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero__stelle {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 20% 30%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1.5px 1.5px at 85% 45%, rgba(220,191,116,0.7), transparent),
+      radial-gradient(1px 1px at 40% 15%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1px 1px at 55% 60%, rgba(255,255,255,0.35), transparent);
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  .hero__interno {
+    position: relative;
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .hero__interno { grid-template-columns: 1.15fr 0.85fr; gap: 4rem; }
+  }
+  .hero .occhiello { color: var(--oro-chiaro); }
+  .hero__titolo {
+    color: var(--bianco);
+    margin-bottom: 0.6rem;
+  }
+  .hero__titolo em {
+    font-style: italic;
+    color: var(--oro-chiaro);
+  }
+  .hero__slogan {
+    font-family: var(--font-titolo);
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--testo-chiaro-soft);
+    margin-bottom: 2rem;
+  }
+  .hero__azioni {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  /* Cornice avatar (segnaposto elegante) */
+  .hero__avatar { display: flex; justify-content: center; }
+  .cornice-avatar {
+    position: relative;
+    width: min(360px, 80vw);
+    aspect-ratio: 4 / 5;
+  }
+  .cornice-avatar__interno {
+    position: absolute;
+    inset: 0;
+    border-radius: 200px 200px 22px 22px;
+    border: 1px solid rgba(199, 161, 74, 0.4);
+    background:
+      radial-gradient(ellipse at 50% 120%, rgba(199,161,74,0.25), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    box-shadow: inset 0 0 60px rgba(199,161,74,0.12), 0 30px 80px -40px rgba(0,0,0,0.8);
+  }
+  /* Quando imposti una foto reale via variabile --avatar, la nota sparisce */
+  .cornice-avatar__interno[style*="--avatar"] .cornice-avatar__nota,
+  .cornice-avatar__interno[style*="--avatar"] :global(.icona) { display: none; }
+  .cornice-avatar__nota {
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--testo-chiaro-soft);
+    opacity: 0.6;
+  }
+  .candela {
+    position: absolute;
+    bottom: -8px;
+    width: 10px;
+    height: 26px;
+    border-radius: 6px;
+    background: linear-gradient(180deg, #f3e6c8, #d8c496);
+  }
+  .candela::before {
+    content: "";
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 14px;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    background: radial-gradient(circle at 50% 65%, #ffe9a8, #f0a848 60%, transparent 75%);
+    filter: blur(0.4px);
+    animation: fiamma 2.4s ease-in-out infinite;
+  }
+  .candela--1 { left: 16%; }
+  .candela--2 { right: 16%; height: 20px; }
+  .candela--2::before { animation-delay: 0.8s; }
+  @keyframes fiamma {
+    0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+    50% { transform: translateX(-52%) scale(1.08); opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .candela::before { animation: none; }
+  }
+
+  /* ---------------- CHI È ARIA ---------------- */
+  .chi {
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 880px) {
+    .chi { grid-template-columns: 1.2fr 0.8fr; gap: 4rem; }
+  }
+  .valori {
+    list-style: none;
+    margin: 1.8rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+  .valori li {
+    padding-left: 1.6rem;
+    position: relative;
+    color: var(--testo-soft);
+  }
+  .valori li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--oro);
+  }
+  .valori strong { color: var(--blu-notte); }
+  .chi__citazione {
+    background: var(--blu-notte);
+    border-radius: var(--raggio-lg);
+    padding: clamp(2rem, 5vw, 3.2rem);
+    box-shadow: var(--ombra-morbida);
+  }
+  .chi__citazione blockquote {
+    margin: 0;
+    font-family: var(--font-titolo);
+    font-style: italic;
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+    line-height: 1.4;
+    color: var(--bianco);
+  }
+  .chi__citazione blockquote::before {
+    content: "“";
+    display: block;
+    font-size: 3.5rem;
+    line-height: 0.2;
+    color: var(--oro);
+    margin-bottom: 1.2rem;
+  }
+
+  /* ---------------- CONSULTI ---------------- */
+  .consulto { display: flex; flex-direction: column; }
+  .consulto h3 { margin-top: 1.1rem; }
+  .consulto__punti {
+    list-style: none;
+    margin: 0.5rem 0 1.5rem;
+    padding: 0;
+    display: grid;
+    gap: 0.55rem;
+  }
+  .consulto__punti li {
+    font-size: 0.95rem;
+    color: var(--testo-soft);
+    padding-left: 1.5rem;
+    position: relative;
+  }
+  .consulto__punti li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--oro);
+    font-weight: 700;
+  }
+  .consulto__link {
+    margin-top: auto;
+    font-weight: 600;
+    color: var(--blu-notte);
+    transition: color var(--transizione), gap var(--transizione);
+  }
+  .consulto__link:hover { color: var(--oro); }
+  .consulto--evidenza {
+    position: relative;
+    border-color: var(--bordo-oro);
+    box-shadow: 0 24px 60px -30px rgba(199,161,74,0.55);
+  }
+  .consulto__badge {
+    position: absolute;
+    top: -13px;
+    right: 1.5rem;
+    background: var(--oro);
+    color: var(--blu-notte);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+  }
+
+  /* ---------------- PASSI ---------------- */
+  .passo {
+    text-align: center;
+    padding: 1rem;
+  }
+  .passo__numero {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 74px;
+    height: 74px;
+    border-radius: 50%;
+    border: 1px solid var(--bordo-oro);
+    font-family: var(--font-titolo);
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--oro);
+    margin-bottom: 1.2rem;
+    background: rgba(199,161,74,0.06);
+  }
+
+  /* ---------------- RECENSIONI ---------------- */
+  .recensione {
+    margin: 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(199,161,74,0.18);
+    border-radius: var(--raggio-lg);
+    padding: 2rem;
+  }
+  .recensione__stelle { color: var(--oro); letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .recensione blockquote {
+    margin: 0 0 1.2rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--testo-chiaro);
+  }
+  .recensione figcaption {
+    font-weight: 600;
+    color: var(--oro-chiaro);
+    letter-spacing: 0.05em;
+  }
+
+  /* ---------------- FAQ ---------------- */
+  .faq-lista {
+    max-width: 780px;
+    margin: 3rem auto 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+  .faq-voce {
+    background: #fff;
+    border: 1px solid var(--bordo);
+    border-radius: var(--raggio);
+    overflow: hidden;
+    transition: border-color var(--transizione);
+  }
+  .faq-voce[open] { border-color: var(--bordo-oro); }
+  .faq-voce summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.3rem 1.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--blu-notte);
+    list-style: none;
+  }
+  .faq-voce summary::-webkit-details-marker { display: none; }
+  .faq-voce__segno {
+    position: relative;
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+  }
+  .faq-voce__segno::before,
+  .faq-voce__segno::after {
+    content: "";
+    position: absolute;
+    background: var(--oro);
+    border-radius: 2px;
+    transition: transform var(--transizione);
+  }
+  .faq-voce__segno::before { top: 8px; left: 0; width: 18px; height: 2px; }
+  .faq-voce__segno::after { top: 0; left: 8px; width: 2px; height: 18px; }
+  .faq-voce[open] .faq-voce__segno::after { transform: scaleY(0); }
+  .faq-voce__risposta {
+    padding: 0 1.5rem 1.4rem;
+  }
+  .faq-voce__risposta p {
+    margin: 0;
+    color: var(--testo-soft);
+  }
+  .faq-nota {
+    margin-top: 2.5rem;
+    font-size: 0.9rem;
+    color: var(--testo-soft);
+    max-width: 60ch;
+    margin-inline: auto;
+  }
+
+  /* ---------------- CONTATTI ---------------- */
+  .contatti-cta {
+    text-align: center;
+    background: var(--grigio-caldo);
+    border-radius: var(--raggio-lg);
+    padding: clamp(2.5rem, 6vw, 4.5rem);
+  }
+  .contatti-cta .guida { margin-bottom: 2rem; }
+  .contatti-email {
+    margin-top: 1.6rem;
+    color: var(--testo-soft);
+  }
+  .contatti-email a {
+    color: var(--blu-notte);
+    font-weight: 600;
+    border-bottom: 1px solid var(--bordo-oro);
+  }
+</style>

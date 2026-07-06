@@ -1,0 +1,184 @@
+---
+import Layout from "../layouts/Layout.astro";
+import IntestazionePagina from "../components/IntestazionePagina.astro";
+import { prenotazione, whatsappLink, contatti, consulti } from "../data/site.js";
+
+const usaCalendly = Boolean(prenotazione.calendlyUrl);
+const metodiPagamento = ["PayPal", "Carta", "Apple Pay", "Google Pay", "Satispay", "Bonifico"];
+---
+
+<Layout
+  titolo="Prenota il tuo consulto"
+  descrizione="Prenota online il tuo consulto ARIA: scegli il servizio, il giorno e l'orario che preferisci direttamente dal calendario."
+>
+  <IntestazionePagina
+    occhiello="Prenota"
+    titolo="Prenota il tuo consulto"
+    sottotitolo="Scegli data e orario dal calendario qui sotto. Riceverai una conferma con tutti i dettagli."
+  />
+
+  <section class="sezione">
+    <div class="contenitore prenota">
+      <div class="prenota__calendario rivela">
+        {usaCalendly ? (
+          <>
+            <div
+              class="calendly-inline-widget"
+              data-url={prenotazione.calendlyUrl}
+              style="min-width:320px;height:720px;"
+            ></div>
+            <script is:inline async src="https://assets.calendly.com/assets/external/widget.js"></script>
+          </>
+        ) : (
+          <>
+            <div id="cal-inline" class="cal-inline"></div>
+            <script is:inline define:vars={{ calLink: prenotazione.calcomLink }}>
+              (function (C, A, L) {
+                let p = function (a, ar) { a.q.push(ar); };
+                let d = C.document;
+                C.Cal = C.Cal || function () {
+                  let cal = C.Cal; let ar = arguments;
+                  if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; }
+                  if (ar[0] === L) {
+                    const api = function () { p(api, arguments); };
+                    const namespace = ar[1]; api.q = api.q || [];
+                    if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); }
+                    else p(cal, ar);
+                    return;
+                  }
+                  p(cal, ar);
+                };
+              })(window, "https://app.cal.com/embed/embed.js", "init");
+              Cal("init", { origin: "https://cal.com" });
+              Cal("inline", {
+                elementOrSelector: "#cal-inline",
+                calLink: calLink,
+                layout: "month_view",
+                config: { theme: "light" },
+              });
+            </script>
+            <noscript>
+              <p class="prenota__noscript">
+                Per prenotare online attiva JavaScript, oppure scrivimi su
+                <a href={whatsappLink} target="_blank" rel="noopener">WhatsApp</a>.
+              </p>
+            </noscript>
+          </>
+        )}
+      </div>
+
+      <aside class="prenota__lato">
+        <div class="carta prenota__box rivela">
+          <h3>I consulti disponibili</h3>
+          <ul class="prenota__servizi">
+            {consulti.map((c) => <li>{c.nome}</li>)}
+          </ul>
+          <a href="/offerte/" class="prenota__vedi">Vedi tariffe →</a>
+        </div>
+
+        <div class="carta prenota__box rivela">
+          <h3>Hai bisogno di aiuto?</h3>
+          <p>Se preferisci, puoi prenotare o chiedere informazioni anche direttamente:</p>
+          <a href={whatsappLink} class="btn" target="_blank" rel="noopener" style="width:100%; justify-content:center;">
+            Scrivimi su WhatsApp
+          </a>
+          <a href={`mailto:${contatti.email}`} class="prenota__email">{contatti.email}</a>
+        </div>
+
+        <div class="carta prenota__box rivela">
+          <h3>Pagamenti accettati</h3>
+          <ul class="loghi-pagamento">
+            {metodiPagamento.map((m) => <li class="logo-pagamento logo-pagamento--chiaro">{m}</li>)}
+          </ul>
+          <p class="prenota__pagamento-nota">
+            Il pagamento viene concordato alla conferma. Pagamento immediato online in arrivo.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .prenota {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+  @media (min-width: 940px) {
+    .prenota { grid-template-columns: 1fr 340px; gap: 2.5rem; }
+  }
+  .prenota__calendario {
+    background: #fff;
+    border: 1px solid var(--bordo);
+    border-radius: var(--raggio-lg);
+    padding: 0.75rem;
+    box-shadow: var(--ombra-carta);
+    min-height: 640px;
+  }
+  .cal-inline {
+    width: 100%;
+    height: 700px;
+    overflow: auto;
+  }
+  .prenota__noscript { padding: 2rem; text-align: center; }
+  .prenota__noscript a { color: var(--oro); font-weight: 600; }
+
+  .prenota__lato { display: grid; gap: 1.5rem; }
+  .prenota__box h3 { font-size: 1.25rem; margin-bottom: 1rem; }
+  .prenota__servizi {
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .prenota__servizi li {
+    padding-left: 1.5rem;
+    position: relative;
+    color: var(--testo-soft);
+  }
+  .prenota__servizi li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--oro);
+  }
+  .prenota__vedi, .prenota__email {
+    font-weight: 600;
+    color: var(--blu-notte);
+  }
+  .prenota__vedi:hover, .prenota__email:hover { color: var(--oro); }
+  .prenota__email {
+    display: block;
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.95rem;
+  }
+  .loghi-pagamento {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .logo-pagamento--chiaro {
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--bordo);
+    border-radius: 8px;
+    color: var(--testo);
+    background: var(--bianco);
+  }
+  .prenota__pagamento-nota {
+    margin: 1rem 0 0;
+    font-size: 0.82rem;
+    color: var(--testo-soft);
+  }
+</style>

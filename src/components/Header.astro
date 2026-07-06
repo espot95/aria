@@ -1,0 +1,202 @@
+---
+import { brand, navigazione } from "../data/site.js";
+---
+
+<header class="intestazione" data-intestazione>
+  <div class="contenitore intestazione__interno">
+    <a href="/" class="marchio" aria-label={`${brand.nome} — home`}>
+      <span class="marchio__nome">{brand.nome}</span>
+      <span class="marchio__sub">{brand.sottotitolo}</span>
+    </a>
+
+    <nav class="nav-desktop" aria-label="Navigazione principale">
+      {navigazione.map((v) => (
+        <a href={v.href} class="nav-desktop__link">{v.testo}</a>
+      ))}
+    </nav>
+
+    <a href="/prenota/" class="btn btn--piccolo nav-cta">Prenota</a>
+
+    <button
+      class="apri-menu"
+      aria-label="Apri menu"
+      aria-expanded="false"
+      aria-controls="menu-mobile"
+      data-apri-menu
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="menu-mobile" id="menu-mobile" data-menu-mobile hidden>
+    <nav aria-label="Navigazione mobile">
+      {navigazione.map((v) => (
+        <a href={v.href} class="menu-mobile__link" data-chiudi-menu>{v.testo}</a>
+      ))}
+      <a href="/prenota/" class="btn menu-mobile__cta" data-chiudi-menu>Prenota il tuo consulto</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const bottone = document.querySelector("[data-apri-menu]");
+  const menu = document.querySelector("[data-menu-mobile]");
+  const intestazione = document.querySelector("[data-intestazione]");
+
+  function alterna(apri) {
+    if (!menu || !bottone) return;
+    menu.hidden = !apri;
+    bottone.setAttribute("aria-expanded", String(apri));
+    bottone.classList.toggle("is-aperto", apri);
+    document.body.style.overflow = apri ? "hidden" : "";
+  }
+
+  bottone?.addEventListener("click", () => {
+    alterna(bottone.getAttribute("aria-expanded") !== "true");
+  });
+
+  document.querySelectorAll("[data-chiudi-menu]").forEach((el) =>
+    el.addEventListener("click", () => alterna(false))
+  );
+
+  // Ombra sull'intestazione quando si scrolla
+  const suScroll = () => {
+    if (window.scrollY > 12) intestazione?.classList.add("is-scrollata");
+    else intestazione?.classList.remove("is-scrollata");
+  };
+  suScroll();
+  window.addEventListener("scroll", suScroll, { passive: true });
+</script>
+
+<style>
+  .intestazione {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(248, 248, 248, 0.82);
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--transizione), background var(--transizione);
+  }
+  .intestazione.is-scrollata {
+    border-bottom-color: var(--bordo);
+    background: rgba(248, 248, 248, 0.92);
+  }
+
+  .intestazione__interno {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 76px;
+  }
+
+  .marchio {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    margin-right: auto;
+  }
+  .marchio__nome {
+    font-family: var(--font-titolo);
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    color: var(--blu-notte);
+    padding-left: 0.28em;
+  }
+  .marchio__sub {
+    font-size: 0.62rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--oro);
+    margin-top: 0.35rem;
+    font-weight: 600;
+  }
+
+  .nav-desktop {
+    display: none;
+    gap: 1.5rem;
+  }
+  .nav-desktop__link {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--testo-soft);
+    position: relative;
+    padding-block: 0.3rem;
+    transition: color var(--transizione);
+  }
+  .nav-desktop__link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 1.5px;
+    background: var(--oro);
+    transition: width var(--transizione);
+  }
+  .nav-desktop__link:hover { color: var(--blu-notte); }
+  .nav-desktop__link:hover::after { width: 100%; }
+
+  .btn--piccolo {
+    padding: 0.6rem 1.35rem;
+    font-size: 0.9rem;
+  }
+  .nav-cta { display: none; }
+
+  /* Hamburger */
+  .apri-menu {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  .apri-menu span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: var(--blu-notte);
+    border-radius: 2px;
+    transition: transform var(--transizione), opacity var(--transizione);
+  }
+  .apri-menu.is-aperto span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .apri-menu.is-aperto span:nth-child(2) { opacity: 0; }
+  .apri-menu.is-aperto span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Menu mobile */
+  .menu-mobile {
+    border-top: 1px solid var(--bordo);
+    background: var(--bianco);
+    padding: 1rem 1.5rem 2rem;
+  }
+  .menu-mobile nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .menu-mobile__link {
+    padding: 0.85rem 0.25rem;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--blu-notte);
+    border-bottom: 1px solid var(--bordo);
+  }
+  .menu-mobile__cta {
+    margin-top: 1.2rem;
+    justify-content: center;
+  }
+
+  @media (min-width: 940px) {
+    .nav-desktop { display: flex; }
+    .nav-cta { display: inline-flex; }
+    .apri-menu { display: none; }
+    .menu-mobile { display: none; }
+  }
+</style>

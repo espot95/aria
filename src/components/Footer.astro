@@ -1,0 +1,144 @@
+---
+import { brand, contatti, whatsappLink, navigazione } from "../data/site.js";
+const anno = new Date().getFullYear();
+
+const metodiPagamento = ["PayPal", "Carta", "Apple Pay", "Google Pay", "Satispay", "Bonifico"];
+---
+
+<footer class="pie">
+  <div class="contenitore pie__interno">
+    <div class="pie__marchio">
+      <span class="pie__nome">{brand.nome}</span>
+      <p class="pie__slogan">"{brand.slogan}"</p>
+      <p class="pie__disclaimer">
+        ARIA offre un momento di ascolto e riflessione e <strong>non sostituisce</strong>
+        il supporto di professionisti sanitari o psicologici.
+      </p>
+    </div>
+
+    <nav class="pie__nav" aria-label="Mappa del sito">
+      <h3 class="pie__titolo">Naviga</h3>
+      {navigazione.map((v) => (
+        <a href={v.href} class="pie__link">{v.testo}</a>
+      ))}
+    </nav>
+
+    <div class="pie__contatti">
+      <h3 class="pie__titolo">Contatti</h3>
+      <a href={whatsappLink} class="pie__link" target="_blank" rel="noopener">WhatsApp</a>
+      <a href={`mailto:${contatti.email}`} class="pie__link">{contatti.email}</a>
+      <a href={contatti.instagram} class="pie__link" target="_blank" rel="noopener">Instagram</a>
+      <a href={contatti.tiktok} class="pie__link" target="_blank" rel="noopener">TikTok</a>
+    </div>
+
+    <div class="pie__pagamenti">
+      <h3 class="pie__titolo">Pagamenti accettati</h3>
+      <ul class="loghi-pagamento">
+        {metodiPagamento.map((m) => <li class="logo-pagamento">{m}</li>)}
+      </ul>
+    </div>
+  </div>
+
+  <div class="contenitore pie__base">
+    <p>© {anno} {brand.nome} · {brand.sottotitolo}</p>
+    <p>Tutti i diritti riservati.</p>
+  </div>
+</footer>
+
+<style>
+  .pie {
+    background: var(--blu-notte);
+    color: var(--testo-chiaro-soft);
+    padding-top: clamp(3.5rem, 7vw, 5.5rem);
+  }
+  .pie__interno {
+    display: grid;
+    gap: 2.5rem;
+  }
+  @media (min-width: 720px) {
+    .pie__interno {
+      grid-template-columns: 1.6fr 1fr 1fr;
+    }
+  }
+  @media (min-width: 1000px) {
+    .pie__interno {
+      grid-template-columns: 2fr 1fr 1fr 1.2fr;
+    }
+  }
+
+  .pie__nome {
+    font-family: var(--font-titolo);
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    color: var(--bianco);
+  }
+  .pie__slogan {
+    font-family: var(--font-titolo);
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--oro-chiaro);
+    margin-top: 0.8rem;
+  }
+  .pie__disclaimer {
+    font-size: 0.86rem;
+    line-height: 1.6;
+    max-width: 42ch;
+    color: var(--testo-chiaro-soft);
+    opacity: 0.85;
+  }
+
+  .pie__titolo {
+    font-family: var(--font-testo);
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--oro);
+    margin-bottom: 1.1rem;
+  }
+  .pie__nav,
+  .pie__contatti {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .pie__link {
+    color: var(--testo-chiaro-soft);
+    font-size: 0.95rem;
+    transition: color var(--transizione);
+    width: fit-content;
+  }
+  .pie__link:hover { color: var(--oro-chiaro); }
+
+  .loghi-pagamento {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .logo-pagamento {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid rgba(199, 161, 74, 0.3);
+    border-radius: 8px;
+    color: var(--testo-chiaro);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .pie__base {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-block: 1.6rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    opacity: 0.75;
+  }
+  .pie__base p { margin: 0; }
+</style>

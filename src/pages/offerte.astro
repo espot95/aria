@@ -1,0 +1,105 @@
+---
+import Layout from "../layouts/Layout.astro";
+import IntestazionePagina from "../components/IntestazionePagina.astro";
+import { tariffe, offerteSpeciali, whatsappLink } from "../data/site.js";
+---
+
+<Layout
+  titolo="Offerte e Tariffe"
+  descrizione="Le tariffe dei consulti ARIA: 20, 30, 45 e 60 minuti. Sconto sulla prima consulenza, pacchetti e gift card."
+>
+  <IntestazionePagina
+    occhiello="Offerte e Tariffe"
+    titolo="Tariffe trasparenti, senza sorprese"
+    sottotitolo="Scegli la durata che preferisci. Ogni consulto è un tempo dedicato solo a te."
+  />
+
+  <section class="sezione">
+    <div class="contenitore">
+      <div class="griglia griglia--2 listino">
+        {tariffe.map((t) => (
+          <div class="tariffa rivela">
+            <div>
+              <h3 class="tariffa__servizio">{t.servizio}</h3>
+              {t.nota && <span class="tariffa__nota">{t.nota}</span>}
+            </div>
+            <span class="tariffa__prezzo">{t.prezzo}</span>
+          </div>
+        ))}
+      </div>
+      <p class="listino-nota">
+        I prezzi indicati sono un esempio e possono variare. Il pagamento viene concordato
+        in fase di conferma della prenotazione.
+      </p>
+    </div>
+  </section>
+
+  <section class="sezione sezione--alt">
+    <div class="contenitore">
+      <div class="testo-centro misura rivela">
+        <span class="occhiello">Vantaggi e Pacchetti</span>
+        <h2>Qualcosa in più per te</h2>
+      </div>
+      <div class="griglia griglia--2" style="margin-top:3rem;">
+        {offerteSpeciali.map((o) => (
+          <div class="carta offerta rivela">
+            <h3>{o.titolo}</h3>
+            <p>{o.dettaglio}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sezione sezione--scura">
+    <div class="contenitore testo-centro">
+      <h2>Pronta a prenotare?</h2>
+      <p class="guida misura">Scegli il giorno e l'orario che preferisci dal calendario online.</p>
+      <div class="hero__azioni" style="justify-content:center; display:flex; gap:1rem; flex-wrap:wrap; margin-top:1.5rem;">
+        <a href="/prenota/" class="btn">Prenota ora</a>
+        <a href={whatsappLink} class="btn btn--fantasma" target="_blank" rel="noopener">Chiedi info su WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .listino { gap: 1.2rem; }
+  .tariffa {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: #fff;
+    border: 1px solid var(--bordo);
+    border-radius: var(--raggio);
+    padding: 1.4rem 1.8rem;
+    transition: border-color var(--transizione), transform var(--transizione);
+  }
+  .tariffa:hover { border-color: var(--bordo-oro); transform: translateY(-2px); }
+  .tariffa__servizio { margin: 0; font-size: 1.35rem; }
+  .tariffa__nota {
+    display: inline-block;
+    margin-top: 0.3rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+  .tariffa__prezzo {
+    font-family: var(--font-titolo);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--blu-notte);
+    white-space: nowrap;
+  }
+  .listino-nota {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: var(--testo-soft);
+    text-align: center;
+  }
+  .offerta h3 { color: var(--blu-notte); }
+  .offerta p { margin: 0; color: var(--testo-soft); }
+</style>
